@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>실시간 랭킹</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        #rank-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 420px;
+            margin: auto;
+        }
+        .rank-card {
+            position: relative;
+            background-color: #ccc; /* 이미지 대신 회색 배경 */
+            border-radius: 15px;
+            height: 180px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .card-content {
+            width: 100%;
+            padding: 15px;
+            color: white;
+            background: gray;
+            /* background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0)); */
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .card-subtitle {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .card-date {
+            font-size: 12px;
+            margin-top: 8px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>실시간 랭킹</h1>
+    <div id="rank-container">로딩 중...</div>
+
+    <script>
+        const rankContainer = document.getElementById('rank-container');
+
+        function updateRank() {
+            fetch('top_rank.txt?nocache=' + new Date().getTime())
+                .then(response => response.text())
+                .then(data => {
+                    console.log("받은 데이터:", data);  // 디버깅 로그
+                    const lines = data.trim().split('\n');
+                    rankContainer.innerHTML = '';
+
+                    lines.forEach((line, index) => {
+                        const parts = line.split(',');
+                        if (parts.length < 7) return; // 최소 7개 컬럼 필요
+
+                        const category = parts[1];
+                        const placeName = parts[2];
+                        const updateDate = parts[3];
+                        const views = parts[6]; // 조회수
+
+                        // 카드 요소 생성
+                        const card = document.createElement('div');
+                        card.className = 'rank-card';
+
+                        const content = document.createElement('div');
+                        content.className = 'card-content';
+
+                        const title = document.createElement('div');
+                        title.className = 'card-title';
+                        title.textContent = `${index + 1}. ${placeName}`;
+
+                        const subtitle = document.createElement('div');
+                        subtitle.className = 'card-subtitle';
+                        subtitle.textContent = `${category} (조회수: ${views})`;
+
+                        const date = document.createElement('div');
+                        date.className = 'card-date';
+                        date.textContent = "최근 업데이트: " + updateDate;
+
+                        content.appendChild(title);
+                        content.appendChild(subtitle);
+                        content.appendChild(date);
+                        card.appendChild(content);
+                        rankContainer.appendChild(card);
+                    });
+                })
+                .catch(err => {
+                    rankContainer.innerHTML = '데이터를 불러오는 중 오류가 발생했습니다.';
+                    console.error(err);
+                });
+        }
+
+        // 60초마다 갱신
+        setInterval(updateRank, 60000);
+
+        // 페이지 로드 시 1회 실행
+        updateRank();
+    </script>
+</body>
+</html>
