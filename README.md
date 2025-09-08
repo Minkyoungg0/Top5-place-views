@@ -107,7 +107,8 @@ AI 에이전을 활용하여 **더미 데이터 100개**를 생성하고, 아래
   <tr>
     <td rowspan="2">
        <b>시연영상</b><br>
-      <img src="https://github.com/user-attachments/assets/0e08cef4-6b31-4f9a-913c-d85ad9362935" width="100%" height="600px" style="object-fit:cover;"></td>
+      <a href="https://github.com/user-attachments/assets/0e08cef4-6b31-4f9a-913c-d85ad9362935">
+      <img src="https://github.com/user-attachments/assets/0e08cef4-6b31-4f9a-913c-d85ad9362935" width="100%" height="600px" style="object-fit:cover;"></a></td>
     <td><b>실시간 로그 (rank_log.log)</b><br>
       <p>실시간 생성 로그를 통해 조회수 증가와 최신 상태를 확인합니다.</p>
       <div style="height:290px; overflow:auto; border:1px solid #eee; padding:5px; word-break:break-all;">
